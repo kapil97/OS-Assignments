@@ -12,15 +12,20 @@ size_t MAX_LINE_LEN = 10000;
 #define UNKNOWN_CMD 99
 FILE *fp;
 char **tokens;
-char **tokExec;
+char **tokAfter;
 char *line;
-char **tok;
 char *filename;
 int inFlag=0;
 int putFlag=0;
 int outFlag=0;
 int redirect=0;
-
+int pipeFlag=0;
+/**
+ * Author Kamleshwar Ragava
+ * Bno. B00813536
+ * email: kragava1@binghamton.edu
+ * CS550: Assignment-1
+ */
 
 
 void initialize()
@@ -30,7 +35,7 @@ void initialize()
 
     // allocate space for individual tokens
     assert( (tokens = malloc(sizeof(char*)*MAX_TOKENS)) != NULL);
-    assert( (tokExec = malloc(sizeof(char*)*MAX_TOKENS)) != NULL);
+    assert( (tokAfter = malloc(sizeof(char*)*MAX_TOKENS)) != NULL);
 
     // open stdin as a file pointer
     assert( (fp = fdopen(STDIN_FILENO, "r")) != NULL);
@@ -114,6 +119,12 @@ void execCommand() {
                 continue;
        //redirect =0;
     }
+    /**
+     * Pipe redirection
+     */
+
+    else if(redirect==3){
+    }
     else{
         printf("Something");
     }
@@ -121,6 +132,7 @@ void execCommand() {
 void tokenize (char * string)
 {
     int token_count = 0;
+    int pipeCount=0;
     int size = MAX_TOKENS;
     char *this_token;
     while ( (this_token = strsep( &string, " \t\v\f\n\r")) != NULL)
@@ -129,6 +141,7 @@ void tokenize (char * string)
         if(outFlag==1){
             if(strcmp(this_token,">")==0){
                 putFlag=1;
+
             }
             if(putFlag!=1) {
                 tokens[token_count] = this_token;
@@ -147,12 +160,29 @@ void tokenize (char * string)
                 execCommand();
             }
         }
+        else
+        if (pipeFlag==1){
+            if(strcmp(this_token,"|")==0){
+                putFlag=1;
+            }
+            {
+                if (putFlag != 1) {
+                    tokens[token_count] = this_token;
+                    printf("Token inside pipeFlag tokenBefore %d: %s\n", token_count, tokens[token_count]);
+                    execCommand();
+                } else if (putFlag == 1) {
+                    tokAfter[token_count] = this_token;
+                    printf("Token inside tokenAfter Pipe%d: %s\n", token_count, tokAfter[token_count]);
+                    execCommand();
+                }
+            }
+        }
         else {
             tokens[token_count] = this_token;
             execCommand();
             printf("Token %d: %s\n", token_count, tokens[token_count]);
         }
-        token_count++;
+            token_count++;
 
         if(token_count >= size){
             size*=2;
@@ -168,20 +198,28 @@ void read_command()
     printf("Shell read this line: %s\n", line);
     char* dupL=malloc(sizeof(char) * MAX_STRING_LEN);
     strcpy(dupL,line);
-    if(strchr(line,'<')||strchr(line,'>')) {
-
+    if(strchr(line,'<')||strchr(line,'>')||strchr(line,'|')) {
         {
             if (strchr(line, '<')) {
                 printf("line contains < \n");
                 redirect = 1;
                 inFlag=1;
-		outFlag=0;
+                pipeFlag=0;
+		        outFlag=0;
             } else if (strchr(line, '>')) {
                 printf("line contains > \n");
                 redirect = 2;
                 outFlag=1;
-		inFlag=0;
-            } else
+                pipeFlag=0;
+		        inFlag=0;
+            } else if (strchr(line, '|')) {
+                printf("line contains | \n");
+                redirect=3;
+                inFlag=0;
+                outFlag=0;
+                pipeFlag=1;
+
+            }else
                 redirect = 0;
         }
         char *pch;
@@ -203,7 +241,6 @@ void read_command()
 
 
 int run_command() {
-
     if (strcmp( tokens[0], EXIT_STR ) == 0)
         return EXIT_CMD;
 
@@ -212,7 +249,6 @@ int run_command() {
 
 int main()
 {
-
     do {
         initialize();
         printf("sh550> ");

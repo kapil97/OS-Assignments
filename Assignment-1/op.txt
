@@ -1,9 +1,0 @@
-a.out
-cmake-build-debug
-CMakeLists.txt
-input.txt
-main.c
-op.txt
-
-out.txt
-
