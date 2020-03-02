@@ -175,10 +175,12 @@ void read_command()
                 printf("line contains < \n");
                 redirect = 1;
                 inFlag=1;
+		outFlag=0;
             } else if (strchr(line, '>')) {
                 printf("line contains > \n");
                 redirect = 2;
                 outFlag=1;
+		inFlag=0;
             } else
                 redirect = 0;
         }
