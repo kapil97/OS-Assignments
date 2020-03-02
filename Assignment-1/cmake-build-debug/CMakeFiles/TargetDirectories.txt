@@ -1,3 +1,3 @@
-/Users/kapil/Desktop/Sem-2/OS/Assignment-1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/kapil/Desktop/Sem-2/OS/Assignment-1/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/kapil/Desktop/Sem-2/OS/Assignment-1/cmake-build-debug/CMakeFiles/Assignment_1.dir
+/Users/kapil/Desktop/OS-Assignments/Assignment-1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/kapil/Desktop/OS-Assignments/Assignment-1/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/kapil/Desktop/OS-Assignments/Assignment-1/cmake-build-debug/CMakeFiles/Assignment_1.dir
