@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <ctype.h>
 #include <assert.h>
 #include <fcntl.h>
 #define MAX_TOKENS 100
@@ -191,6 +192,25 @@ void tokenize (char * string)
     }
 
 }
+
+char *ltrim(char *s)
+{
+    while(isspace(*s)) s++;
+    return s;
+}
+
+char *rtrim(char *s)
+{
+    char* back = s + strlen(s);
+    while(isspace(*--back));
+    *(back+1) = '\0';
+    return s;
+}
+
+char *trim(char *s)
+{
+    return rtrim(ltrim(s));
+}
 void read_command()
 {
 
@@ -227,7 +247,7 @@ void read_command()
         while (pch != NULL) {
             if (strcmp(pch, "<") == 0 || strcmp(pch, ">") == 0) {
                 pch = strtok(NULL, " ");
-                filename = pch;
+                filename = trim(pch);
             } else {
                 pch = strtok(NULL, " ");
             }
